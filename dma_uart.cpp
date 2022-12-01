@@ -18,11 +18,9 @@ DmaUart::DmaUart(uart_inst_t* uart, uint baudrate)
 }
 
 void DmaUart::init_uart(uart_inst_t* uart, uint baudrate) {
-  uart_init(uart, baudrate);
   gpio_set_function(kUartTxPin, GPIO_FUNC_UART);
   gpio_set_function(kUartRxPin, GPIO_FUNC_UART);
-
-  uart_getc(uart);  // NOTE: get rid of the first junk byte
+  uart_init(uart, baudrate);
 }
 
 static void dma_irq_handler() {
