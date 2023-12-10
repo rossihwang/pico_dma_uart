@@ -160,7 +160,7 @@ uint16_t DmaUart::read_all(uint8_t* data) {
   uint16_t available;
   available = (rx_user_index_ <= rx_dma_index_)
                   ? (rx_dma_index_ - rx_user_index_)
-                  : (kTxBuffLength + rx_dma_index_ - rx_user_index_);
+                  : (kRxBuffLength + rx_dma_index_ - rx_user_index_);
 
   if (0 < available) {
     if (rx_user_index_ < rx_dma_index_) {
