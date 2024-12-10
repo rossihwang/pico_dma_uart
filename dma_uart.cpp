@@ -94,7 +94,7 @@ uint16_t DmaUart::write(const uint8_t* data, uint16_t length) {
 }
 
 void DmaUart::flush() {
-  uint size = (tx_dma_index_ < tx_user_index_)
+  uint size = (tx_dma_index_ <= tx_user_index_)
                   ? (tx_user_index_ - tx_dma_index_)
                   : (kTxBuffLength + tx_user_index_ - tx_dma_index_);
   // Size check
