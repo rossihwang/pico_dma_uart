@@ -151,8 +151,17 @@ uint16_t DmaUart::read(uint8_t* data, uint16_t length) {
     memcpy(data, &rx_buffer_[rx_user_index_], length);
   } else {
     uint16_t left = kRxBuffLength - rx_user_index_;
+
+    if (left > length) {
+      // limit to target buffer size!
+      left = length;
+    }
+
     memcpy(data, &rx_buffer_[rx_user_index_], left);
-    memcpy(&data[left], rx_buffer_, length - left);
+
+    if (length > left) {
+      memcpy(&data[left], rx_buffer_, length - left);
+    }
   }
   rx_user_index_ = (rx_user_index_ + length) & (kRxBuffLength - 1);
 
