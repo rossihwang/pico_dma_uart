@@ -137,18 +137,25 @@ uint16_t DmaUart::read(uint8_t* data, uint16_t length) {
   available = (rx_user_index_ <= rx_dma_index_)
                   ? (rx_dma_index_ - rx_user_index_)
                   : (kTxBuffLength + rx_dma_index_ - rx_user_index_);
-  if (length <= available) {
-    if (rx_user_index_ < rx_dma_index_) {
-      memcpy(data, &rx_buffer_[rx_user_index_], length);
-    } else {
-      uint16_t left = kRxBuffLength - rx_user_index_;
-      memcpy(data, &rx_buffer_[rx_user_index_], left);
-      memcpy(&data[left], rx_buffer_, length - left);
-    }
-    rx_user_index_ = (rx_user_index_ + length) & (kRxBuffLength - 1);
-  } else {
+  
+  if (available < length) {
+    // read as much as we have
+    length = available;
+  }
+  
+  if (length == 0) {
     return 0;
   }
+
+  if (rx_user_index_ < rx_dma_index_) {
+    memcpy(data, &rx_buffer_[rx_user_index_], length);
+  } else {
+    uint16_t left = kRxBuffLength - rx_user_index_;
+    memcpy(data, &rx_buffer_[rx_user_index_], left);
+    memcpy(&data[left], rx_buffer_, length - left);
+  }
+  rx_user_index_ = (rx_user_index_ + length) & (kRxBuffLength - 1);
+
   return length;
 }
 
