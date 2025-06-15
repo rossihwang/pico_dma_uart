@@ -124,7 +124,7 @@ uint16_t DmaUart::read_byte(uint8_t* data) {
     return -1;
   }
   *data = rx_buffer_[rx_user_index_];
-  rx_user_index_ = (rx_user_index_++) & (kRxBuffLength - 1);
+  rx_user_index_ = (++rx_user_index_) & (kRxBuffLength - 1);
   return 0;
 }
 
@@ -136,7 +136,7 @@ uint16_t DmaUart::read(uint8_t* data, uint16_t length) {
   uint16_t available;
   available = (rx_user_index_ <= rx_dma_index_)
                   ? (rx_dma_index_ - rx_user_index_)
-                  : (kTxBuffLength + rx_dma_index_ - rx_user_index_);
+                  : (kRxBuffLength + rx_dma_index_ - rx_user_index_);
   
   if (available < length) {
     // read as much as we have
