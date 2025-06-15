@@ -124,7 +124,7 @@ uint16_t DmaUart::read_byte(uint8_t* data) {
     return -1;
   }
   *data = rx_buffer_[rx_user_index_];
-  rx_user_index_ = (++rx_user_index_) & (kRxBuffLength - 1);
+  rx_user_index_ = (rx_user_index_ + 1) & (kRxBuffLength - 1);
   return 0;
 }
 
